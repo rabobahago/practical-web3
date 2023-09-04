@@ -33,12 +33,22 @@ contract Counter {
         counter = 0;
     }
 
+    //receive function it's clear you're accepting ether on transactions without data
     receive() external payable {
         uint totalValue = msg.value;
         (bool successOne, ) = addressOne.call{value: totalValue / 2}("");
         require(successOne);
         (bool successTwo, ) = addressTwo.call{value: totalValue / 2}("");
         require(successTwo);
+    }
+
+    // this fallback function is for function signature mistakes.
+    fallback() external {
+        //uint totalValue = msg.value;
+        // (bool successOne, ) = addressOne.call{value: totalValue / 2}("");
+        // require(successOne);
+        // (bool successTwo, ) = addressTwo.call{value: totalValue / 2}("");
+        //require(successTwo);
     }
 
     function donate() external payable {
