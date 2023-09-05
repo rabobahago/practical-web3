@@ -47,4 +47,18 @@ contract MappingData {
         collectableCol.owner = msg.sender;
         collectableCol.forSale = false;
     }
+
+    function createUser() external {
+        User storage user = users[msg.sender];
+        require(!user.isActive, "address already a user");
+        user.balance = 100;
+        user.isActive = true;
+    }
+
+    function transfer(address _to, uint _amount) external {
+        require(users[msg.sender].isActive, "not active  user");
+        require(users[_to].isActive, "Not active user");
+        users[msg.sender].balance -= _amount;
+        users[_to].balance += _amount;
+    }
 }
