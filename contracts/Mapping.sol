@@ -10,8 +10,12 @@ contract MappingData {
         uint price;
         bool forSale;
     }
-
+    struct User {
+        uint balance;
+        bool isActive;
+    }
     mapping(uint => Collectable) public idCollectable;
+    mapping(address => User) public users;
     modifier onlySodas() {
         require(numSodas > 1);
         _;
