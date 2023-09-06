@@ -8,7 +8,6 @@ interface IERC20 {
 contract EventC {
     function _transfer(address from, address to, uint amount) internal virtual {
         // perform various checks, such as the `from` address has `amount` of tokens
-
-        emit Transfer(from, to, amount);
+        //     emit Transfer(from, to, amount);
     }
 }
