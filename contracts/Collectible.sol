@@ -2,10 +2,10 @@
 pragma solidity ^0.8.9;
 
 contract Collectible {
-    event Deployed(address _owner);
-    event Transfer(address owner, address newOwner);
+    event Deployed(address indexed _owner);
+    event Transfer(address indexed owner, address indexed newOwner);
     event ForSale(uint, uint);
-    event Purchase(uint amount, address buyer);
+    event Purchase(uint amount, address indexed buyer);
     address public owner;
     uint price;
 
