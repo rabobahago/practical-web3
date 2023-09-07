@@ -1,5 +1,5 @@
 // add the game address here and update the contract name if necessary
-const gameAddr = "";
+const gameAddr = "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0";
 const contractName = "Game1";
 
 async function main() {

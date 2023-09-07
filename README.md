@@ -59,7 +59,7 @@ Now run `npx hardhat run scripts/win.js`, this will go ahead and call `win` on y
 
 Try each game! See if you can emit the Winner event on each one. Remember to:
 
-1. Change the `contractName` in `scripts/deploy.js`
+1. Change the `contractName` in `scripts/deployGame.js`
 2. Deploy each new game to your local hardhat environment
 3. Copy the address into the `scripts/win.js`
 4. Change the `contractName` in `scripts/win.js`
