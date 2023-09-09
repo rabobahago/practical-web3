@@ -15,16 +15,23 @@ contract VoteStorage {
     Vote none = Vote(Choices(0), address(0));
 
     function createVote(Choices choice) external {
+        require(!hasVoted(msg.sender));
         votes.push(Vote(choice, msg.sender));
     }
 
-    function findVote(address _add) internal view returns (Vote memory) {
+    function findVote(address _add) internal view returns (Vote storage) {
         for (uint i = 0; i < votes.length; i++) {
             if (votes[i].voter == _add) {
                 return votes[i];
             }
         }
         return none;
+    }
+
+    function changeVote(Choices choice) external {
+        Vote storage vote = findVote(msg.sender);
+        require(vote.voter != none.voter);
+        vote.choice = choice;
     }
 
     function hasVoted(address _address) public view returns (bool) {
