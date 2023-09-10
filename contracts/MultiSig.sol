@@ -68,4 +68,12 @@ contract MultiSig {
         uint id = addTransaction(_destination, _value);
         confirmTransaction(id);
     }
+
+    function executeTransaction(uint transactionId) public {
+        require(isConfirmed(transactionId));
+        Transaction storage _tx = transactions[transactionId];
+        (bool success, ) = _tx.destinations.call{value: _tx.value}("");
+        require(success);
+        _tx.executed = true;
+    }
 }
