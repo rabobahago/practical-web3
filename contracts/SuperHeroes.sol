@@ -7,6 +7,7 @@ interface Enemy {
 
 abstract contract Hero {
     uint public health = 100;
+    uint public energy = 10;
 
     constructor(uint _health) {
         health = _health;
@@ -21,13 +22,16 @@ abstract contract Hero {
         Spell
     }
 
-    function attack(address enemy) public virtual;
+    function attack(address) public virtual {
+        energy--;
+    }
 }
 
 contract Mage is Hero(100) {
     function attack(address _add) public override {
         Enemy enemy = Enemy(_add);
         enemy.takeAttack(Hero.AttackTypes.Spell);
+        Hero.attack(_add);
     }
 }
 
@@ -35,5 +39,6 @@ contract Warrior is Hero(50) {
     function attack(address _add) public override {
         Enemy enemy = Enemy(_add);
         enemy.takeAttack(Hero.AttackTypes.Brawl);
+        super.attack(_add);
     }
 }
