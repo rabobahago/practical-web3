@@ -10,6 +10,7 @@ contract MultiSig {
         address destinations;
         uint value;
         bool executed;
+        bytes data;
     }
     mapping(uint256 => Transaction) public transactions;
     mapping(uint => mapping(address => bool)) public confirmations;
@@ -37,11 +38,6 @@ contract MultiSig {
         return false;
     }
 
-    function confirmTransaction(uint transactionId) public {
-        require(isOwner(msg.sender), "You  are  not owner");
-        confirmations[transactionId][msg.sender] = true;
-    }
-
     function getConfirmationsCount(
         uint transactionId
     ) public view returns (uint) {
@@ -56,24 +52,42 @@ contract MultiSig {
 
     function addTransaction(
         address _destination,
-        uint _value
+        uint _value,
+        bytes memory _data
     ) internal returns (uint) {
         uint transactionId = transactionCount;
-        transactions[transactionId] = Transaction(_destination, _value, false);
+        transactions[transactionId] = Transaction(
+            _destination,
+            _value,
+            false,
+            _data
+        );
         transactionCount += 1;
         return transactionId;
     }
 
-    function submitTransaction(address _destination, uint _value) external {
-        uint id = addTransaction(_destination, _value);
+    function submitTransaction(
+        address _destination,
+        uint _value,
+        bytes memory _data
+    ) external {
+        uint id = addTransaction(_destination, _value, _data);
         confirmTransaction(id);
     }
 
     function executeTransaction(uint transactionId) public {
         require(isConfirmed(transactionId));
         Transaction storage _tx = transactions[transactionId];
-        (bool success, ) = _tx.destinations.call{value: _tx.value}("");
+        (bool success, ) = _tx.destinations.call{value: _tx.value}(_tx.data);
         require(success);
         _tx.executed = true;
+    }
+
+    function confirmTransaction(uint transactionId) public {
+        require(isOwner(msg.sender), "You  are  not owner");
+        confirmations[transactionId][msg.sender] = true;
+        if (isConfirmed(transactionId)) {
+            executeTransaction(transactionId);
+        }
     }
 }
