@@ -22,7 +22,17 @@ contract MultiSig {
         required = _required;
     }
 
+    function isOwner(address _add) public view returns (bool) {
+        for (uint i = 0; i < owners.length; i++) {
+            if (owners[i] == _add) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function confirmTransaction(uint transactionId) public {
+        require(isOwner(msg.sender), "You  are  not owner");
         confirmations[transactionId][msg.sender] = true;
     }
 
