@@ -24,6 +24,10 @@ contract MultiSig {
 
     receive() external payable {}
 
+    function isConfirmed(uint transactionId) public view returns (bool) {
+        return getConfirmationsCount(transactionId) >= required;
+    }
+
     function isOwner(address _add) public view returns (bool) {
         for (uint i = 0; i < owners.length; i++) {
             if (owners[i] == _add) {
