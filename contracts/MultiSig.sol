@@ -57,4 +57,9 @@ contract MultiSig {
         transactionCount += 1;
         return transactionId;
     }
+
+    function submitTransaction(address _destination, uint _value) external {
+        uint id = addTransaction(_destination, _value);
+        confirmTransaction(id);
+    }
 }
