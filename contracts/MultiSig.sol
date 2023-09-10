@@ -22,6 +22,8 @@ contract MultiSig {
         required = _required;
     }
 
+    receive() external payable {}
+
     function isOwner(address _add) public view returns (bool) {
         for (uint i = 0; i < owners.length; i++) {
             if (owners[i] == _add) {
@@ -51,7 +53,7 @@ contract MultiSig {
     function addTransaction(
         address _destination,
         uint _value
-    ) public returns (uint) {
+    ) internal returns (uint) {
         uint transactionId = transactionCount;
         transactions[transactionId] = Transaction(_destination, _value, false);
         transactionCount += 1;
