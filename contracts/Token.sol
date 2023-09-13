@@ -8,6 +8,11 @@ contract Token {
     uint public totalSupply;
 
     mapping(address => uint) public balance;
+     constructor() {
+        totalSupply = 1000 * (10 ** uint256(decimals));
+        balances[msg.sender] = totalSupply;
+    }
+
 
     function balanceOf(address _add) public returns (uint) {
         return balance[_add];
