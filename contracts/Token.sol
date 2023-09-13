@@ -7,14 +7,21 @@ contract Token {
     uint8 public decimals = 18;
     uint public totalSupply;
 
-    mapping(address => uint) public balance;
-     constructor() {
+    mapping(address => uint) public balances;
+
+    constructor() {
+        //total token created
         totalSupply = 1000 * (10 ** uint256(decimals));
         balances[msg.sender] = totalSupply;
     }
 
+    function balanceOf(address _add) public view returns (uint) {
+        return balances[_add];
+    }
 
-    function balanceOf(address _add) public returns (uint) {
-        return balance[_add];
+    function transfer(address _recipient, uint256 _amount) public {
+        require(balances[msg.sender] >= _amount, "Insufficient fund");
+        balances[msg.sender] -= _amount;
+        balances[_recipient] += _amount;
     }
 }
