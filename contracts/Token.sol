@@ -8,6 +8,7 @@ contract Token {
     uint public totalSupply;
 
     mapping(address => uint) public balances;
+    event Transfer(address, address, uint256);
 
     constructor() {
         //total token created
@@ -23,5 +24,6 @@ contract Token {
         require(balances[msg.sender] >= _amount, "Insufficient fund");
         balances[msg.sender] -= _amount;
         balances[_recipient] += _amount;
+        emit Transfer(msg.sender, _recipient, _amount);
     }
 }
