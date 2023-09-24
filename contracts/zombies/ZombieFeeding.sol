@@ -2,7 +2,6 @@ pragma solidity >=0.5.0 <0.6.0;
 
 // put import statement here
 import "./ZombieFactory.sol";
-import "./Ownable.sol";
 
 contract KittyInterface {
     function getKitty(
@@ -24,10 +23,10 @@ contract KittyInterface {
         );
 }
 
-contract ZombieFeeding is ZombieFactory, Ownable {
+contract ZombieFeeding is ZombieFactory {
     KittyInterface kittyContract;
 
-    function setKittyContractAddress(address _address) external {
+    function setKittyContractAddress(address _address) external onlyOwner {
         kittyContract = KittyInterface(_address);
     }
 

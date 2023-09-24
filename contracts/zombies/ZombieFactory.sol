@@ -11,10 +11,13 @@ import "./Ownable.sol";
 contract ZombieFactory is Ownable {
     uint dnaDigits = 16;
     uint dnaModulus = 10 ** dnaDigits;
+    uint cooldownTime = 1 days;
     event NewZombie(uint zombieId, string name, uint dna);
     struct Zombie {
         string name;
         uint dna;
+        uint32 level;
+        uint32 readyTime;
     }
 
     Zombie[] public zombies;
@@ -29,7 +32,9 @@ contract ZombieFactory is Ownable {
        /**
         @ By reference, which means that your function is called with a... reference to the original variable. Thus, if your function changes the value of the variable it receives, the value of the original variable gets changed.
         */
-        uint id = zombies.push(Zombie(_name, _dna));
+        uint id = zombies.push(
+            Zombie(_name, _dna, 1, uint32(now + cooldownTime))
+        );
         zombieToOwner[id] = msg.sender;
         ownerZombieCount[msg.sender]++;
         emit NewZombie(id, _name, _dna);
