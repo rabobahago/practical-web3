@@ -18,6 +18,8 @@ contract ZombieFactory is Ownable {
         uint dna;
         uint32 level;
         uint32 readyTime;
+        uint16 winCount;
+        uint16 lossCount;
     }
 
     Zombie[] public zombies;
@@ -33,7 +35,7 @@ contract ZombieFactory is Ownable {
         @ By reference, which means that your function is called with a... reference to the original variable. Thus, if your function changes the value of the variable it receives, the value of the original variable gets changed.
         */
         uint id = zombies.push(
-            Zombie(_name, _dna, 1, uint32(now + cooldownTime))
+            Zombie(_name, _dna, 1, uint32(now + cooldownTime), 0, 0)
         );
         zombieToOwner[id] = msg.sender;
         ownerZombieCount[msg.sender]++;
@@ -42,14 +44,11 @@ contract ZombieFactory is Ownable {
 
     function _generateRandomDna(
         string memory _str
-    ) private view returns (uint) {
-        // start here
-    }
+    ) private view returns (uint) {}
 
     function _generateRandomDna(
         string memory _str
     ) private view returns (uint) {
-        // start here
         uint rand = uint(keccak256(abi.encodePacked(_str)));
         return rand % dnaModulus;
     }
