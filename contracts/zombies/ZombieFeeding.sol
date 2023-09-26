@@ -25,8 +25,9 @@ contract KittyInterface {
 
 contract ZombieFeeding is ZombieFactory {
     KittyInterface kittyContract;
-    modifier onlyOf(uint _zombieId) {
-        require(msg.sender == zombies[_zombieId]);
+    modifier ownerOf(uint _zombieId) {
+        require(msg.sender == zombieToOwner[_zombieId]);
+        _;
     }
 
     function setKittyContractAddress(address _address) external onlyOwner {
@@ -37,7 +38,7 @@ contract ZombieFeeding is ZombieFactory {
         uint _zombieId,
         uint _targetDna,
         string memory _species
-    ) internal onlyOf(_zombieId) {
+    ) internal ownerOf(_zombieId) {
         Zombie storage myZombie = zombies[_zombieId];
         require(_isReady(myZombie));
         _targetDna = _targetDna % dnaModulus;
