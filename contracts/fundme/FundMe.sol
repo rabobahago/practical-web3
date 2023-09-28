@@ -10,20 +10,36 @@ contract FundMe {
      * Data Feed: ETH/USD
      * Address: 0x694AA1769357215DE4FAC081bf1f309aDC325306
      */
+    AggregatorV3Interface priceFeed;
 
     function fund() public payable {
         require(msg.value >= minimumUsd);
     }
 
-    function getPrice() public {}
-
-    function getVersion() public view returns (uint256) {
-        AggregatorV3Interface priceFeed = AggregatorV3Interface(
+    constructor() {
+        priceFeed = AggregatorV3Interface(
             0x694AA1769357215DE4FAC081bf1f309aDC325306
         );
+    }
+
+    function getPrice() public view returns (uint) {
+        (, int price, , , ) = priceFeed.latestRoundData();
+        /**
+         * ETH to USD 300,00000000 from chainlink price feed
+         * @ 1e18 / 1e8 = 1e10
+         * Note 1e8 is coming from the price feed
+         */
+        return uint(price * 1e10);
+    }
+
+    function getVersion() public view returns (uint256) {
         return priceFeed.version();
     }
 
-    function getConversionsRate() public {}
+    function getConversionRate(uint256 ethAmount) public view returns (uint) {
+        uint ethPrice = getPrice();
+        uint ethAmountInUsd = (ethPrice * ethAmount) / 1e18;
+        return ethAmountInUsd;
+    }
     // function withdraw(){}
 }
