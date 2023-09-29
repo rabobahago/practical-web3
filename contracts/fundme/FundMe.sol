@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.8;
 import "./PriceConverter.sol";
+error NotOwner();
 
 contract FundMe {
     using PriceConverter for uint256;
@@ -19,7 +20,9 @@ contract FundMe {
     }
 
     modifier onlyOnwer() {
-        require(msg.sender == i_owner, "Sender is not owner");
+        if (msg.sender != i_owner) {
+            revert NotOwner();
+        }
         _;
     }
 
@@ -47,5 +50,13 @@ contract FundMe {
             value: address(this).balance
         }("");
         require(callSuccessful, "Call Failed");
+    }
+
+    receive() external payable {
+        fund();
+    }
+
+    fallback() external payable {
+        fund();
     }
 }
