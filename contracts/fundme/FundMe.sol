@@ -4,10 +4,10 @@ import "./PriceConverter.sol";
 
 contract FundMe {
     using PriceConverter for uint256;
-    uint minimumUsd = 50 * 1e18;
+    uint constant MINIMUM_USD = 50 * 1e18;
     address[] public funders;
     mapping(address => uint) public addressToAmountFunded;
-    address owner;
+    address immutable i_owner;
 
     /**
      * Network: Sepolia
@@ -15,17 +15,17 @@ contract FundMe {
      * Address: 0x694AA1769357215DE4FAC081bf1f309aDC325306
      */
     constructor() {
-        owner = msg.sender;
+        i_owner = msg.sender;
     }
 
     modifier onlyOnwer() {
-        require(msg.sender == owner, "Sender is not owner");
+        require(msg.sender == i_owner, "Sender is not owner");
         _;
     }
 
     function fund() public payable {
         require(
-            msg.value.getConversionRate() >= minimumUsd,
+            msg.value.getConversionRate() >= MINIMUM_USD,
             "Didn't send enough!"
         );
         funders.push(msg.sender);
