@@ -5,6 +5,8 @@ import "./zombieattack.sol";
 import "./ERC721.sol";
 
 contract ZombieOwnership is ZombieAttack, ERC721 {
+    mapping(uint => address) zombieApprovals;
+
     function balanceOf(address _owner) external view returns (uint256) {
         // 1. Return the number of zombies `_owner` has here
         return ownerZombieCount[_owner];
@@ -26,7 +28,18 @@ contract ZombieOwnership is ZombieAttack, ERC721 {
         address _from,
         address _to,
         uint256 _tokenId
-    ) external payable {}
+    ) external payable {
+        require(
+            zombieToOwner[_tokenId] == msg.sender ||
+                zombieApprovals[_tokenId] == msg.sender
+        );
+        _transfer(_from, _to, _tokenId);
+    }
 
-    function approve(address _approved, uint256 _tokenId) external payable {}
+    function approve(
+        address _approved,
+        uint256 _tokenId
+    ) external payable onlyOwnerOf(_tokenId) {
+        zombieApprovals[_tokenId] = _approved;
+    }
 }
