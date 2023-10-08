@@ -31,6 +31,7 @@ contract OtherContract {
 }
 
 contract Call {
+    error ErrorE();
     //Define the Response event and output the success and data returned by the call
     event Response(bool success, bytes data);
 
@@ -43,4 +44,17 @@ contract Call {
     }
 
     receive() external payable {}
+
+    function callGetX(
+        address payable _addr,
+        uint _x
+    ) external payable returns (uint) {
+        (bool success, bytes memory data) = _addr.call{value: msg.value}(
+            abi.encodeWithSignature("getGet()", _x)
+        );
+        if (success) {
+            revert ErrorE();
+        }
+        return abi.decode(data, (uint));
+    }
 }
