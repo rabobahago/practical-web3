@@ -18,22 +18,28 @@ contract Pair {
     }
 }
 
-contract PairFactory2{
-        mapping(address => mapping(address => address)) public getPair; // Find the Pair address by two token addresses
-        address[] public allPairs; // Save all Pair addresses
+contract PairFactory2 {
+    mapping(address => mapping(address => address)) public getPair; // Find the Pair address by two token addresses
+    address[] public allPairs; // Save all Pair addresses
 
-        function createPair2(address tokenA, address tokenB) external returns (address pairAddr) {
-            require(tokenA != tokenB, 'IDENTICAL_ADDRESSES'); //Avoid conflicts when tokenA and tokenB are the same
-            // Calculate salt with tokenA and tokenB addresses
-            (address token0, address token1) = tokenA < tokenB ? (tokenA, tokenB) : (tokenB, tokenA); //Sort tokenA and tokenB by size
-            bytes32 salt = keccak256(abi.encodePacked(token0, token1));
-            //Deploy new contract with create2
-            Pair pair = new Pair{salt: salt}();
-            // call initialize function of the new contract
-            pair.initialize(tokenA, tokenB);
-            // Update address map
-            pairAddr = address(pair);
-            allPairs.push(pairAddr);
-            getPair[tokenA][tokenB] = pairAddr;
-            getPair[tokenB][tokenA] = pairAddr;
-        }
+    function createPair2(
+        address tokenA,
+        address tokenB
+    ) external returns (address pairAddr) {
+        require(tokenA != tokenB, "IDENTICAL_ADDRESSES"); //Avoid conflicts when tokenA and tokenB are the same
+        // Calculate salt with tokenA and tokenB addresses
+        (address token0, address token1) = tokenA < tokenB
+            ? (tokenA, tokenB)
+            : (tokenB, tokenA); //Sort tokenA and tokenB by size
+        bytes32 salt = keccak256(abi.encodePacked(token0, token1));
+        //Deploy new contract with create2
+        Pair pair = new Pair{salt: salt}();
+        // call initialize function of the new contract
+        pair.initialize(tokenA, tokenB);
+        // Update address map
+        pairAddr = address(pair);
+        allPairs.push(pairAddr);
+        getPair[tokenA][tokenB] = pairAddr;
+        getPair[tokenB][tokenA] = pairAddr;
+    }
+}
