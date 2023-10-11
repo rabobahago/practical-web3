@@ -69,63 +69,58 @@ interface IERC20 {
     ) external returns (bool);
 }
 
-contract ERC {
-    mapping(address => uint256) public override balanceOf;
+// contract ERC {
+//     mapping(address => uint256) public override balanceOf;
 
-    mapping(address => mapping(address => uint256)) public override allowance;
+//     mapping(address => mapping(address => uint256)) public override allowance;
 
-    uint256 public override totalSupply; // total supply of the token
+//     uint256 public override totalSupply; // total supply of the token
 
-    string public name; // the name of the token
-    string public symbol; // the symbol of the token
+//     string public name; // the name of the token
+//     string public symbol; // the symbol of the token
 
-    uint8 public decimals = 18; // decimal places of the token
+//     uint8 public decimals = 18; // decimal places of the token
 
-    constructor(string memory name_, string memory symbol_) {
-        name = name_;
-        symbol = symbol_;
-    }
+//     constructor(string memory name_, string memory symbol_) {
+//         name = name_;
+//         symbol = symbol_;
+//     }
 
-    function transfer(
-        address _recipient,
-        uint _amount
-    ) external override returns (bool) {
-        balanceOf[msg.sender] -= _amount;
-        balanceOf[_recipient] += _amount;
-        // emit Transfer(msg.sender, _recipient, _amount);
-        return true;
-    }
+//     function transfer(
+//         address _recipient,
+//         uint _amount
+//     ) external override returns (bool) {
+//         balanceOf[msg.sender] -= _amount;
+//         balanceOf[_recipient] += _amount;
+//         emit Transfer(msg.sender, _recipient, _amount);
+//         return true;
+//     }
 
-    function approve(
-        address _spender,
-        uint _amount
-    ) external override returns (bool) {
-        allowance[msg.sender][_spender] = _amount;
-        // emit Approval(msg.sender, _spender, _amount);
-        return true;
-    }
+//     function approve(
+//         address _spender,
+//         uint _amount
+//     ) external override returns (bool) {
+//         allowance[msg.sender][_spender] = _amount;
+//         emit Approval(msg.sender, _spender, _amount);
+//         return true;
+//     }
 
-    function transferFrom(
-        address sender,
-        address recipient,
-        uint amount
-    ) external override returns (bool) {
-        allowance[sender][msg.sender] -= amount;
-        balanceOf[sender] -= amount;
-        balanceOf[recipient] += amount;
-        // emit Transfer(sender, recipient, amount);
-        return true;
-    }
+//     function transferFrom(
+//         address sender,
+//         address recipient,
+//         uint amount
+//     ) external override returns (bool) {
+//         allowance[sender][msg.sender] -= amount;
+//         balanceOf[sender] -= amount;
+//         balanceOf[recipient] += amount;
+//         emit Transfer(sender, recipient, amount);
+//         return true;
+//     }
 
-    function mint(uint amount) external {
-        balanceOf[msg.sender] += amount;
-        totalSupply += amount;
-        // emit Transfer(address(0), msg.sender, amount);
-    }
+//     function mint(uint amount) external {
+//         balanceOf[msg.sender] += amount;
+//         totalSupply += amount;
+//         emit Transfer(address(0), msg.sender, amount);
+//     }
 
-    function burn(uint amount) external {
-        balanceOf[msg.sender] -= amount;
-        totalSupply -= amount;
-        // emit Transfer(msg.sender, address(0), amount);
-    }
-}
+// }
